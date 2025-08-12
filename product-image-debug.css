@@ -1,0 +1,83 @@
+/* Debug CSS untuk melihat masalah gambar produk */
+
+/* Force show product images */
+.product-image {
+    display: block !important;
+    width: 100% !important;
+    height: 80px !important;
+    object-fit: cover !important;
+    background: #f0f0f0 !important;
+    border: 1px solid #ddd !important;
+}
+
+/* Placeholder styling */
+.product-image-placeholder {
+    width: 100% !important;
+    height: 80px !important;
+    background: #f8f9fa !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #6c757d !important;
+    font-size: 12px !important;
+    border: 1px dashed #ccc !important;
+}
+
+/* Product card container */
+.product-card {
+    border: 1px solid #e9ecef !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    background: white !important;
+}
+
+.product-card a {
+    display: block !important;
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.product-info {
+    padding: 10px !important;
+}
+
+.product-title {
+    font-size: 14px !important;
+    margin: 0 0 5px 0 !important;
+    color: #333 !important;
+}
+
+.product-price {
+    font-size: 13px !important;
+    color: #007cba !important;
+    font-weight: 600 !important;
+}
+
+/* Grid layout */
+.product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+    gap: 10px !important;
+    padding: 10px 0 !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px !important;
+    }
+    
+    .product-image,
+    .product-image-placeholder {
+        height: 100px !important;
+    }
+    
+    .product-title {
+        font-size: 13px !important;
+    }
+    
+    .product-price {
+        font-size: 12px !important;
+    }
+}
