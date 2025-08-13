@@ -3340,7 +3340,7 @@ class TirtonicAdvancedFloatingNavbar {
             z-index: 2;
             padding: 1.904vh 2.646vw;
             background: linear-gradient(135deg, var(--tirtonic-primary) 0%, var(--tirtonic-secondary) 100%);
-            min-width: 45vw;
+            min-width: 50vw;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -3634,12 +3634,13 @@ class TirtonicAdvancedFloatingNavbar {
             overflow-y: auto;
         }
         
-        /* Product Grid - portrait style */
+        /* Product Grid - 3 column desktop style */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
             margin-top: 10px;
+            width: 100%;
         }
         
         .product-card {
@@ -3683,27 +3684,27 @@ class TirtonicAdvancedFloatingNavbar {
         }
         
         .product-info {
-            padding: 8px;
+            padding: 10px;
             flex-shrink: 0;
         }
         
         .product-title {
-            margin: 0 0 4px 0;
-            font-size: 11px;
+            margin: 0 0 6px 0;
+            font-size: 12px;
             font-weight: 500;
             color: #333;
-            line-height: 1.2;
+            line-height: 1.3;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 26px;
+            min-height: 32px;
         }
         
         .product-price {
             color: var(--tirtonic-primary);
             font-weight: 600;
-            font-size: 10px;
+            font-size: 11px;
             display: block;
         }
         
