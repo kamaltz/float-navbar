@@ -1938,16 +1938,16 @@ class TirtonicAdvancedFloatingNavbar {
                         $image_url = '';
                         
                         if ($image_id) {
-                            $image_url = wp_get_attachment_image_url($image_id, 'thumbnail');
+                            $image_url = wp_get_attachment_image_url($image_id, 'medium');
                         }
                         
                         // Enhanced fallback for missing images
                         if (!$image_url) {
                             if (function_exists('wc_placeholder_img_src')) {
-                                $image_url = wc_placeholder_img_src('thumbnail');
+                                $image_url = wc_placeholder_img_src('medium');
                             }
                             if (!$image_url) {
-                                $image_url = 'data:image/svg+xml;base64,' . base64_encode('<svg width="150" height="150" xmlns="http://www.w3.org/2000/svg"><rect width="150" height="150" fill="#f0f0f0"/><text x="75" y="75" text-anchor="middle" dy=".3em" fill="#999" font-family="Arial" font-size="12">No Image</text></svg>');
+                                $image_url = 'data:image/svg+xml;base64,' . base64_encode('<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="300" fill="#f0f0f0"/><text x="150" y="150" text-anchor="middle" dy=".3em" fill="#999" font-family="Arial" font-size="14">No Image</text></svg>');
                             }
                         }
                         
@@ -2012,16 +2012,16 @@ class TirtonicAdvancedFloatingNavbar {
                         $image_url = '';
                         
                         if ($image_id) {
-                            $image_url = wp_get_attachment_image_url($image_id, 'thumbnail');
+                            $image_url = wp_get_attachment_image_url($image_id, 'medium');
                         }
                         
                         // Enhanced fallback for missing images
                         if (!$image_url) {
                             if (function_exists('wc_placeholder_img_src')) {
-                                $image_url = wc_placeholder_img_src('thumbnail');
+                                $image_url = wc_placeholder_img_src('medium');
                             }
                             if (!$image_url) {
-                                $image_url = 'data:image/svg+xml;base64,' . base64_encode('<svg width="150" height="150" xmlns="http://www.w3.org/2000/svg"><rect width="150" height="150" fill="#f0f0f0"/><text x="75" y="75" text-anchor="middle" dy=".3em" fill="#999" font-family="Arial" font-size="12">No Image</text></svg>');
+                                $image_url = 'data:image/svg+xml;base64,' . base64_encode('<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="300" fill="#f0f0f0"/><text x="150" y="150" text-anchor="middle" dy=".3em" fill="#999" font-family="Arial" font-size="14">No Image</text></svg>');
                             }
                         }
                         
@@ -2068,16 +2068,16 @@ class TirtonicAdvancedFloatingNavbar {
                     $image_url = '';
                     
                     if ($image_id) {
-                        $image_url = wp_get_attachment_image_url($image_id, 'thumbnail');
+                        $image_url = wp_get_attachment_image_url($image_id, 'medium');
                     }
                     
                     // Enhanced fallback for missing images
                     if (!$image_url) {
                         if (function_exists('wc_placeholder_img_src')) {
-                            $image_url = wc_placeholder_img_src('thumbnail');
+                            $image_url = wc_placeholder_img_src('medium');
                         }
                         if (!$image_url) {
-                            $image_url = 'data:image/svg+xml;base64,' . base64_encode('<svg width="150" height="150" xmlns="http://www.w3.org/2000/svg"><rect width="150" height="150" fill="#f0f0f0"/><text x="75" y="75" text-anchor="middle" dy=".3em" fill="#999" font-family="Arial" font-size="12">No Image</text></svg>');
+                            $image_url = 'data:image/svg+xml;base64,' . base64_encode('<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="300" fill="#f0f0f0"/><text x="150" y="150" text-anchor="middle" dy=".3em" fill="#999" font-family="Arial" font-size="14">No Image</text></svg>');
                         }
                     }
                     
@@ -3634,77 +3634,76 @@ class TirtonicAdvancedFloatingNavbar {
             overflow-y: auto;
         }
         
-        /* Product Grid Layout */
+        /* Product Grid - portrait style */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
         }
         
         .product-card {
             background: #fff;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
+            border-radius: 6px;
             overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+            border: 1px solid #f0f0f0;
+            aspect-ratio: 3/4;
         }
         
         .product-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-color: var(--tirtonic-primary);
+            transform: translateY(-1px);
         }
         
         .product-card a {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             text-decoration: none;
             color: inherit;
         }
         
         .product-image {
             width: 100%;
-            height: 80px;
+            flex: 1;
             object-fit: cover;
             display: block;
+            background: #f8f9fa;
         }
         
         .product-image-placeholder {
             width: 100%;
-            height: 80px;
+            flex: 1;
             background: #f8f9fa;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6c757d;
-            font-size: 12px;
-        }
-        
-        .product-image-placeholder::before {
-            content: 'No Image';
+            color: #999;
+            font-size: 11px;
         }
         
         .product-info {
-            padding: 10px;
+            padding: 8px;
+            flex-shrink: 0;
         }
         
         .product-title {
-            margin: 0 0 5px 0;
-            font-size: 12px;
-            font-weight: 600;
+            margin: 0 0 4px 0;
+            font-size: 11px;
+            font-weight: 500;
             color: #333;
-            line-height: 1.3;
+            line-height: 1.2;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            min-height: 26px;
         }
         
         .product-price {
             color: var(--tirtonic-primary);
-            font-weight: bold;
-            font-size: 11px;
+            font-weight: 600;
+            font-size: 10px;
             display: block;
         }
         
@@ -3764,24 +3763,27 @@ class TirtonicAdvancedFloatingNavbar {
             }
         }
             
-            .product-image {
-                height: 60px;
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
             }
             
+            .product-image,
             .product-image-placeholder {
-                height: 60px;
+                height: 100px;
             }
             
             .product-info {
-                padding: 8px;
+                padding: 6px;
             }
             
             .product-title {
-                font-size: 11px;
+                font-size: 10px;
+                min-height: 24px;
             }
             
             .product-price {
-                font-size: 10px;
+                font-size: 9px;
             }
         }
         
