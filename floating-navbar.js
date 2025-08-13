@@ -870,11 +870,11 @@ class TirtonicFloatingNav {
     if (productList) {
       if (products.length > 0) {
         productList.innerHTML = `
-                    <div class="product-grid">
+                    <div class="tirtonic-search-products">
                         ${products
                           .map(
                             (product) => `
-                            <div class="product-card">
+                            <div class="tirtonic-product-item">
                                 <a href="${product.url}">
                                     ${
                                       product.image
@@ -971,11 +971,11 @@ class TirtonicFloatingNav {
     const searchResults = this.nav.querySelector(".searched--product-list");
     if (searchResults) {
       searchResults.innerHTML = `
-                <div class="product-grid">
+                <div class="tirtonic-search-products">
                     ${products
                       .map(
                         (product) => `
-                        <div class="product-card">
+                        <div class="tirtonic-product-item">
                             <a href="${product.url}">
                                 ${
                                   product.image
@@ -1265,11 +1265,11 @@ class TirtonicFloatingNav {
     const searchResults = container.querySelector(".searched--product-list");
     if (searchResults) {
       searchResults.innerHTML = `
-                <div class="product-grid">
+                <div class="tirtonic-search-products">
                     ${products
                       .map(
                         (product) => `
-                        <div class="product-card">
+                        <div class="tirtonic-product-item">
                             <a href="${product.url}">
                                 ${
                                   product.image
@@ -1299,11 +1299,11 @@ class TirtonicFloatingNav {
     if (productList) {
       if (products && products.length > 0) {
         productList.innerHTML = `
-                    <div class="product-grid">
+                    <div class="tirtonic-search-products">
                         ${products
                           .map(
                             (product) => `
-                            <div class="product-card">
+                            <div class="tirtonic-product-item">
                                 <a href="${product.url}">
                                     ${
                                       product.image

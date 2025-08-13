@@ -409,9 +409,9 @@
         padding: 10px 16px !important;
     }
     
-    #mobile-fullscreen-content .product-grid {
+    #mobile-fullscreen-content .tirtonic-search-products {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
+        gap: 8px !important;
     }
     
     #mobile-fullscreen-content #search--revamp .form-group input {
