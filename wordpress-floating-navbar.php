@@ -408,23 +408,40 @@ class TirtonicAdvancedFloatingNavbar {
                                             <tr>
                                                 <th scope="row">Search Action</th>
                                                 <td>
-                                                    <select name="search_action" class="regular-text">
+                                                    <select name="search_action" class="regular-text" id="search-action-select">
                                                         <option value="product_search" <?php selected($this->options['search_action'] ?? 'product_search', 'product_search'); ?>>Product Search with Recommendations</option>
                                                         <option value="site_search" <?php selected($this->options['search_action'] ?? 'product_search', 'site_search'); ?>>Site-wide Search</option>
-                                                        <option value="custom_url" <?php selected($this->options['search_action'] ?? 'product_search', 'custom_url'); ?>>Custom URL</option>
+                                                        <option value="custom_url" <?php selected($this->options['search_action'] ?? 'product_search', 'custom_url'); ?>>Custom URL (Redirect to Store)</option>
                                                     </select>
+                                                    <p class="description">Choose how search should behave when users search for products</p>
                                                 </td>
                                             </tr>
-                                            <tr class="search-custom-url" style="display: none;">
-                                                <th scope="row">Custom URL</th>
+                                            <tr class="search-custom-url-row" style="<?php echo ($this->options['search_action'] ?? 'product_search') === 'custom_url' ? '' : 'display: none;'; ?>">
+                                                <th scope="row">Custom Search URL</th>
                                                 <td>
-                                                    <input type="url" name="search_custom_url" value="<?php echo esc_attr($this->options['search_custom_url'] ?? ''); ?>" class="regular-text">
+                                                    <input type="url" name="custom_search_url" value="<?php echo esc_attr($this->options['custom_search_url'] ?? 'https://tirtonic.com/store'); ?>" class="regular-text" placeholder="https://tirtonic.com/store">
+                                                    <p class="description">URL where users will be redirected when searching (search term will be appended as ?s=term)</p>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Search Placeholder</th>
                                                 <td>
                                                     <input type="text" name="search_placeholder" value="<?php echo esc_attr($this->options['search_placeholder'] ?? 'Search products...'); ?>" class="regular-text">
+                                                    <p class="description">Placeholder text shown in the search input field</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Search Results Title</th>
+                                                <td>
+                                                    <input type="text" name="search_results_title" value="<?php echo esc_attr($this->options['search_results_title'] ?? 'Search Results'); ?>" class="regular-text">
+                                                    <p class="description">Title shown above search results</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">No Results Message</th>
+                                                <td>
+                                                    <input type="text" name="no_results_message" value="<?php echo esc_attr($this->options['no_results_message'] ?? 'No products found. Try different keywords.'); ?>" class="regular-text">
+                                                    <p class="description">Message shown when no search results are found</p>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1218,6 +1235,18 @@ class TirtonicAdvancedFloatingNavbar {
                 });
             });
             
+            // Search action dropdown handler
+            $('#search-action-select').on('change', function() {
+                const value = $(this).val();
+                const $customUrlRow = $('.search-custom-url-row');
+                
+                if (value === 'custom_url') {
+                    $customUrlRow.show();
+                } else {
+                    $customUrlRow.hide();
+                }
+            });
+            
             // Footer menu validation
             $('input[name^="footer_menu_"][name$="_title"]').on('blur', function() {
                 const $this = $(this);
@@ -1984,6 +2013,20 @@ class TirtonicAdvancedFloatingNavbar {
             wp_send_json_error(array('message' => 'Search term too short'));
         }
         
+        // Check search action setting
+        $search_action = $this->options['search_action'] ?? 'product_search';
+        $custom_search_url = $this->options['custom_search_url'] ?? 'https://tirtonic.com/store';
+        
+        // If custom URL or site search, redirect instead of AJAX
+        if ($search_action === 'custom_url' || $search_action === 'site_search') {
+            $redirect_url = $search_action === 'custom_url' ? $custom_search_url : home_url('/?s=' . urlencode($search_term));
+            wp_send_json_success(array(
+                'redirect' => true,
+                'url' => $redirect_url . (strpos($redirect_url, '?') !== false ? '&' : '?') . 's=' . urlencode($search_term)
+            ));
+            return;
+        }
+        
         if (class_exists('WooCommerce')) {
             $args = array(
                 'post_type' => 'product',
@@ -1993,10 +2036,18 @@ class TirtonicAdvancedFloatingNavbar {
                 'orderby' => 'relevance',
                 'meta_query' => array(
                     array(
-                        'key' => '_visibility',
-                        'value' => array('catalog', 'visible'),
-                        'compare' => 'IN'
+                        'key' => '_stock_status',
+                        'value' => 'instock',
+                        'compare' => '='
                     )
+                ),
+                'tax_query' => array(
+                    array(
+                        'taxonomy' => 'product_visibility',
+                        'field'    => 'name',
+                        'terms'    => 'exclude-from-catalog',
+                        'operator' => 'NOT IN',
+                    ),
                 )
             );
             
@@ -2383,7 +2434,10 @@ class TirtonicAdvancedFloatingNavbar {
             'cart_icon' => 'cart',
             'arrow_icon' => 'arrow_down',
             'search_action' => 'product_search',
+            'custom_search_url' => 'https://tirtonic.com/store',
             'search_placeholder' => 'Search products...',
+            'search_results_title' => 'Search Results',
+            'no_results_message' => 'No products found. Try different keywords.',
             'cart_action' => 'cart_page',
             'checkout_button_text' => 'Checkout',
             'checkout_button_action' => 'checkout',
@@ -2927,8 +2981,10 @@ class TirtonicAdvancedFloatingNavbar {
         $sanitized['cart_icon'] = sanitize_text_field($settings['cart_icon'] ?? 'cart');
         $sanitized['arrow_icon'] = sanitize_text_field($settings['arrow_icon'] ?? 'arrow_down');
         $sanitized['search_action'] = sanitize_text_field($settings['search_action'] ?? 'product_search');
-        $sanitized['search_custom_url'] = esc_url_raw($settings['search_custom_url'] ?? '');
+        $sanitized['custom_search_url'] = esc_url_raw($settings['custom_search_url'] ?? 'https://tirtonic.com/store');
         $sanitized['search_placeholder'] = sanitize_text_field($settings['search_placeholder'] ?? 'Search products...');
+        $sanitized['search_results_title'] = sanitize_text_field($settings['search_results_title'] ?? 'Search Results');
+        $sanitized['no_results_message'] = sanitize_text_field($settings['no_results_message'] ?? 'No products found. Try different keywords.');
         $sanitized['cart_action'] = sanitize_text_field($settings['cart_action'] ?? 'cart_page');
         $sanitized['cart_custom_url'] = esc_url_raw($settings['cart_custom_url'] ?? '');
         $sanitized['checkout_button_text'] = sanitize_text_field($settings['checkout_button_text'] ?? 'Checkout');

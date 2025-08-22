@@ -82,15 +82,24 @@ class TirtonicFloatingNav {
       });
     }
 
-    // Search Button - toggle search dropdown
+    // Search Button - handle search action based on settings
     const searchBtn = this.nav.querySelector(".tirtonic-nav-search");
     if (searchBtn) {
       searchBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        if (this.currentView === "search" && this.isOpen) {
-          this.close();
+        
+        const settings = JSON.parse(this.nav.getAttribute("data-settings") || "{}");
+        const searchAction = settings.search_action || 'product_search';
+        
+        if (searchAction === 'custom_url' || searchAction === 'site_search') {
+          this.handleSearchAction();
         } else {
-          this.openNavbar("search");
+          // Default product search behavior
+          if (this.currentView === "search" && this.isOpen) {
+            this.close();
+          } else {
+            this.openNavbar("search");
+          }
         }
       });
     }
@@ -941,8 +950,26 @@ class TirtonicFloatingNav {
         return response.json();
       })
       .then((data) => {
-        if (data.success && data.data && data.data.length > 0) {
-          this.renderSearchResults(data.data);
+        if (data.success) {
+          // Check if this is a redirect response
+          if (data.data && data.data.redirect) {
+            window.location.href = data.data.url;
+            return;
+          }
+          
+          // Handle normal search results
+          if (data.data && data.data.length > 0) {
+            this.renderSearchResults(data.data);
+          } else {
+            if (searchResults) {
+              const settings = JSON.parse(this.nav.getAttribute("data-settings") || "{}");
+              const noResultsMsg = settings.no_results_message || 'No products found. Try different keywords.';
+              searchResults.innerHTML =
+                '<p style="text-align:center;color:#666;padding:15px;">' + noResultsMsg + '</p>';
+            }
+            // Load newest products as fallback
+            this.loadNewestProducts();
+          }
         } else {
           if (searchResults) {
             searchResults.innerHTML =
@@ -1193,8 +1220,26 @@ class TirtonicFloatingNav {
         return response.json();
       })
       .then((data) => {
-        if (data.success && data.data && data.data.length > 0) {
-          this.renderMobileSearchResults(data.data, container);
+        if (data.success) {
+          // Check if this is a redirect response
+          if (data.data && data.data.redirect) {
+            window.location.href = data.data.url;
+            return;
+          }
+          
+          // Handle normal search results
+          if (data.data && data.data.length > 0) {
+            this.renderMobileSearchResults(data.data, container);
+          } else {
+            if (searchResults) {
+              const settings = JSON.parse(this.nav.getAttribute("data-settings") || "{}");
+              const noResultsMsg = settings.no_results_message || 'No products found. Try different keywords.';
+              searchResults.innerHTML =
+                '<p style="text-align:center;color:#666;padding:20px;">' + noResultsMsg + '</p>';
+            }
+            // Load newest products as fallback
+            this.loadMobileNewestProducts(container);
+          }
         } else {
           if (searchResults) {
             searchResults.innerHTML =
@@ -1349,10 +1394,10 @@ class TirtonicFloatingNav {
 
     switch (action) {
       case "search":
-        this.handleSearchAction();
+        this.openNavbar("search");
         break;
       case "cart":
-        this.handleCartAction();
+        this.openNavbar("cart");
         break;
       case "url":
       default:
@@ -1363,6 +1408,26 @@ class TirtonicFloatingNav {
     }
 
     // Analytics tracking disabled
+  }
+  
+  handleSearchAction() {
+    const settings = JSON.parse(this.nav.getAttribute("data-settings") || "{}");
+    const searchAction = settings.search_action || 'product_search';
+    const customSearchUrl = settings.custom_search_url || 'https://tirtonic.com/store';
+    
+    switch (searchAction) {
+      case 'custom_url':
+        window.location.href = customSearchUrl;
+        break;
+      case 'site_search':
+        const searchUrl = window.location.origin + '/?s=';
+        window.location.href = searchUrl;
+        break;
+      default:
+        // Open search dropdown for product search
+        this.openNavbar("search");
+        break;
+    }
   }
 
   // Public API methods
