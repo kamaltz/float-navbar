@@ -3634,26 +3634,76 @@ class TirtonicAdvancedFloatingNavbar {
             overflow-y: auto;
         }
         
-        /* Product Grid - 3 column desktop style */
-        .product-grid {
+        /* Tirtonic Product Grid - 3 column desktop */
+        .tirtonic-search-products {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 10px;
+            gap: 10px;
+            margin-top: 15px;
             width: 100%;
         }
         
-        .product-card {
+        .tirtonic-product-item {
             background: #fff;
-            border-radius: 6px;
+            border-radius: 8px;
             overflow: hidden;
-            transition: transform 0.2s ease;
-            border: 1px solid #f0f0f0;
-            aspect-ratio: 3/4;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            height: 180px;
         }
         
-        .product-card:hover {
-            transform: translateY(-1px);
+        .tirtonic-product-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            border-color: var(--tirtonic-primary);
+        }
+        
+        .tirtonic-product-item a {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .product-image,
+        .product-image-placeholder {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            background: #f8f9fa;
+            flex-shrink: 0;
+        }
+        
+        .product-info {
+            padding: 8px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .product-title {
+            margin: 0 0 4px 0;
+            font-size: 11px;
+            font-weight: 500;
+            color: #333;
+            line-height: 1.2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        .product-price {
+            color: var(--tirtonic-primary);
+            font-weight: 600;
+            font-size: 10px;
+            margin-top: auto;
         }
         
         .product-card a {
@@ -3758,9 +3808,9 @@ class TirtonicAdvancedFloatingNavbar {
                 margin-bottom: 8px !important;
             }
             
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+            .tirtonic-search-products {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
             }
         }
             
